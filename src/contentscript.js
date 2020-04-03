@@ -9,12 +9,20 @@ const urlList = [
 function injectScripts(src) {
   const s = document.createElement('script');
   s.src = chrome.runtime.getURL(src);
+  // eslint-disable-next-line
   s.onload = function() {
     this.remove();
     const event = new Event('script-loaded');
     document.dispatchEvent(event);
   };
   (document.head || document.documentElement).appendChild(s);
+}
+
+function onInit() {
+  chrome.storage.sync.get('checked', ({ checked }) => {
+    const { hostname } = window.location;
+    window.onMessage({ isChecked: checked && checked[hostname] });
+  });
 }
 
 function main() {
@@ -24,13 +32,6 @@ function main() {
     if (count === urlList.length) onInit();
   });
   urlList.forEach(src => injectScripts(src));
-}
-
-function onInit() {
-  chrome.storage.sync.get('checked', ({ checked }) => {
-    const { hostname } = window.location;
-    window.onMessage({ isChecked: checked && checked[hostname] });
-  });
 }
 
 function onMessage({ isChecked }) {
