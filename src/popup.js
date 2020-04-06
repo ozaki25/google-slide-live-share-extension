@@ -1,4 +1,4 @@
-const checkbox = document.querySelector('#activate');
+const activate = document.querySelectorAll('input[name="activate"]');
 const initialized = document.querySelector('.initialized');
 const uninitialized = document.querySelector('.uninitialized');
 
@@ -12,22 +12,15 @@ function onLoad() {
       uninitialized.style.display = 'block';
     }
   });
-
-  chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-    const { url } = tabs[0];
-    const { hostname } = new URL(url);
-    chrome.storage.sync.get('checked', ({ checked }) => {
-      checkbox.checked = checked[hostname];
-    });
-  });
 }
 
 function onChange(e) {
-  const isChecked = e.target.checked;
+  const { value } = e.target;
+  console.log({ value });
   chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-    chrome.tabs.sendMessage(tabs[0].id, { isChecked });
+    chrome.tabs.sendMessage(tabs[0].id, { activateValue: value });
   });
 }
 
 window.addEventListener('load', onLoad);
-checkbox.addEventListener('change', onChange);
+activate.forEach(input => input.addEventListener('change', onChange));

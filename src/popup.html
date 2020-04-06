@@ -6,17 +6,23 @@
   <body>
     <div class="initialized">
       <h3>設定</h3>
-      <label for="activate-post">
+      <label for="activate-publish">
         【発表者用】スライドの遷移を通知する
-        <input type="checkbox" name="activate-post" id="activate-post" />
+        <input
+          type="radio"
+          name="activate"
+          id="activate-publish"
+          value="publish"
+        />
       </label>
       <br />
       <label for="activate-subscribe">
         【聴講者用】スライドの遷移を受信する
         <input
-          type="checkbox"
-          name="activate-subscribe"
+          type="radio"
+          name="activate"
           id="activate-subscribe"
+          value="subscribe"
         />
       </label>
     </div>
