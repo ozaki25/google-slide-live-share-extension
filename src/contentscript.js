@@ -19,10 +19,7 @@ function injectScripts(src) {
 }
 
 function onInit() {
-  chrome.storage.sync.get('checked', ({ checked }) => {
-    const { hostname } = window.location;
-    window.onMessage({ isChecked: checked && checked[hostname] });
-  });
+  console.log('init');
 }
 
 function main() {
@@ -34,31 +31,20 @@ function main() {
   urlList.forEach(src => injectScripts(src));
 }
 
-function onMessage({ isChecked }) {
-  chrome.storage.sync.get(
-    ['checked', 'apiKey', 'projectId'],
-    ({ checked, apiKey, projectId }) => {
-      const eventName = isChecked
-        ? 'subscribe-firestore'
-        : 'unsubscribe-firestore';
-      const event = new CustomEvent(eventName, {
-        detail: { apiKey, projectId },
-      });
-      document.dispatchEvent(event);
-
-      const { hostname } = window.location;
-      chrome.storage.sync.set({
-        checked: { ...checked, [hostname]: isChecked },
-      });
-      console.log({ checked: { ...checked, [hostname]: isChecked } });
-    },
-  );
+function onMessage({ activateValue }) {
+  console.log(`onMessage#activateValue: ${activateValue}`);
+  chrome.storage.sync.get(['apiKey', 'projectId'], ({ apiKey, projectId }) => {
+    const eventName = activateValue
+      ? 'subscribe-firestore'
+      : 'unsubscribe-firestore';
+    const event = new CustomEvent(eventName, { detail: { apiKey, projectId } });
+    document.dispatchEvent(event);
+  });
 }
 
-function onChangeStorage({ checked }) {
-  const { newValue } = checked;
-  const { hostname } = window.location;
-  const eventName = newValue[hostname]
+function onChangeStorage({ activateValue }) {
+  console.log(`onChangeStorage#activateValue: ${activateValue}`);
+  const eventName = activateValue
     ? 'subscribe-firestore'
     : 'unsubscribe-firestore';
   const event = new Event(eventName);

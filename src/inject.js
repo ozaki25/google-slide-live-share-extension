@@ -1,6 +1,6 @@
 // valiables
 let initialized = false;
-const dbName = 'messages';
+const dbName = 'live-share';
 
 // functions
 class Firestore {
@@ -39,7 +39,6 @@ class Firestore {
   }
 
   render() {
-    this.dbRef();
     console.log('render');
   }
 }
@@ -47,7 +46,8 @@ class Firestore {
 function excute(event) {
   try {
     const { apiKey, projectId } = event.detail;
-    Firestore({ firebase, apiKey, projectId });
+    const f = new Firestore({ firebase, apiKey, projectId });
+    console.log(f);
   } catch (error) {
     console.log(error);
   }
