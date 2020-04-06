@@ -1,7 +1,8 @@
-body{
-  width: 150px;
+body {
+  width: 250px;
 }
 
-.initialized, .uninitialized {
+.initialized,
+.uninitialized {
   display: none;
 }
