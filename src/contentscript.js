@@ -37,7 +37,9 @@ function onMessage({ activateValue }) {
     const eventName = activateValue
       ? 'subscribe-firestore'
       : 'unsubscribe-firestore';
-    const event = new CustomEvent(eventName, { detail: { apiKey, projectId } });
+    const event = new CustomEvent(eventName, {
+      detail: { apiKey, projectId, activateValue },
+    });
     document.dispatchEvent(event);
   });
 }
